@@ -72,6 +72,7 @@ echo "Complete: $tool installation."
 # test wheel
 echo "Beginning: $tool test ..."
 $svpy -m $tool -h
+$svpy -m $tool
 echo "Complete: $tool test."
 
 popd
