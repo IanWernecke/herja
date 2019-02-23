@@ -12,7 +12,8 @@ from .conversions import to_bytes, to_str
 __all__ = [
     'decorators',
     'execute',
-    'os'
+    'os',
+    'quotify'
 ]
 
 
@@ -33,34 +34,22 @@ def execute(args, blocking=True, cwd=None):
     # log the execution information
     logging.info('[%s]$ %s', os.path.basename(cwd), ' '.join(quotify(to_str(a)) for a in args))
 
-    if blocking:
+    if not blocking:
+        return subprocess.Popen(args, cwd=cwd)
 
-        # create the subprocess
-        p = subprocess.Popen(
-            args,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            cwd=cwd
-        )
+    # create the subprocess
+    p = subprocess.Popen(
+        args,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        cwd=cwd
+    )
 
-        # obtain the stdout and stderr bytes objects with communicate()
-        stdout, stderr = p.communicate()
+    # obtain the stdout and stderr bytes objects with communicate()
+    stdout, stderr = p.communicate()
 
-        # return two bytes objects and an integer
-        return stdout, stderr, p.returncode
-
-    else:
-
-        # doubts about closing the handle exist
-        with open('/dev/null', 'wb') as f:
-            subprocess.Popen(
-                args,
-                stdout=f,
-                stderr=f,
-                cwd=cwd
-            )
-
-        return None
+    # return two bytes objects and an integer
+    return stdout, stderr, p.returncode
 
 
 def quotify(data):
