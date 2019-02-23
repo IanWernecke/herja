@@ -10,10 +10,17 @@ from .conversions import to_bytes, to_str
 
 
 __all__ = [
+    'assert_type',
     'decorators',
     'execute',
+    'logging',
     'os',
-    'quotify'
+    'net',
+    'quotify',
+    'subprocess',
+    'to_bytes',
+    'to_soup',
+    'to_str'
 ]
 
 
