@@ -17,6 +17,7 @@ __all__ = [
     'os',
     'net',
     'quotify',
+    'settings',
     'subprocess',
     'to_bytes',
     'to_soup',

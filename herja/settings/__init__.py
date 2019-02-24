@@ -11,6 +11,12 @@ from ..constants import EMPTY_DICT_SHA256_HEXDIGEST
 from ..conversions import to_bytes
 
 
+__all__ = [
+    'SETTINGS_PATH',
+    'Settings'
+]
+
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SETTINGS_PATH = os.path.join(BASE_DIR, 'settings.json')
 
