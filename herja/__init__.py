@@ -28,7 +28,7 @@ def execute(args, blocking=True, cwd=None):
     """
     Execute a command as if it were being interpreted by a command line.
 
-    :return: (stdout, stderr, returncode) if blocking else None
+    :return: (bytes: stdout, bytes: stderr, int: returncode) if blocking else None
     """
     if cwd is None:
         cwd = os.getcwd()

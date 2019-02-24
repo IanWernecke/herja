@@ -72,7 +72,9 @@ echo "Complete: $tool installation."
 # test wheel
 echo "Beginning: $tool test ..."
 $svpy -m $tool -h
-$svpy -m $tool
+$svpy -m $tool.settings reset
+$svpy -m $tool.settings set blah 0
+$svpy -m $tool.settings get blah
 echo "Complete: $tool test."
 
 popd

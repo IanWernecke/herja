@@ -3,4 +3,4 @@ build/
 dist/
 virtual/
 *.egg-info/
-
+reinstall.sh
