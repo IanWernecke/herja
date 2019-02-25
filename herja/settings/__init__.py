@@ -38,10 +38,23 @@ class Settings(dict):
         self.read(self.path)
         return self
 
-    def __exit__(self, exc_type, exc_val, tb):
+    def __exit__(self, exc_type, exc_val, traceback):
         """If this is a with block and we have a path, write the data to disk."""
         if self.read_digest != self.digest:
             self.write(self.path)
+
+    def __getitem__(self, key):
+        """Perform a get on this item, but prompt if the key does not exist."""
+        result = super(Settings, self).get(key, None)
+        while result is None:
+            value = input('Enter a value for "{0}": '.format(key)).strip()
+            if not len(value):
+                continue
+            if value.isdigit():
+                value = int(value)
+            self[key] = value
+            result = super(Settings, self).get(key, None)
+        return result
 
     @property
     def current(self):
@@ -57,19 +70,20 @@ class Settings(dict):
         """Load settings from a json file."""
         if not os.path.isfile(path):
             logging.warning('Settings path not found: "%s"', self.path)
-            return 0
+            return 1
 
         logging.info('Settings reading from: "%s"', self.path)
-        with open(path, 'rb') as f:
-            data = f.read()
+        with open(path, 'rb') as settings_file:
+            data = settings_file.read()
 
         self.update(json.loads(data))
         self.read_digest = self.digest
+        return 0
 
     def write(self, path=SETTINGS_PATH):
         """Write the settings back out to a json file."""
         if path is None:
             path = self.path
         assert_not_none(path)
-        with open(path, 'wb') as f:
-            f.write(to_bytes(json.dumps(self.current)))
+        with open(path, 'wb') as settings_file:
+            settings_file.write(to_bytes(json.dumps(self.current)))

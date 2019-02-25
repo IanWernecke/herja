@@ -6,9 +6,11 @@ import logging
 from requests import Session as RequestsSession
 
 from .constants import HEADER_DEFAULTS
+from .settings import Settings
 
 
 class Session(RequestsSession):
+    """A requests session with custom headers set."""
 
     def __init__(self, header_tuples=None):
         """Initialize a special requests session with the default headers."""
@@ -17,3 +19,12 @@ class Session(RequestsSession):
         for key, value in HEADER_DEFAULTS if header_tuples is None else header_tuples:
             self.headers[key] = value
             logging.debug('Set Header "%s" to "%s"', key, value)
+
+
+def get_meetup_events(group):
+    """Obtain the events of a meetup group, using an api token."""
+    with Settings() as settings:
+        token = settings['meetup-api-token']
+
+    with Session() as session:
+        response = session.get('https://api.meetup.com/{0}/events', params={'sign': 'true', 'token': token})

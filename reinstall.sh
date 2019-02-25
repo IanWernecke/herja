@@ -5,6 +5,7 @@ virtual="$(pwd)/virtual"
 vpy="$virtual/bin/python"
 svpy="bin/python"
 
+
 # ensure virtualenv is installed into python
 vexists=$($py -m pip list | grep "^virtualenv" | wc -l)
 if [[ $vexists -eq 0 ]]; then
@@ -74,7 +75,10 @@ echo "Beginning: $tool test ..."
 $svpy -m $tool -h
 $svpy -m $tool.settings reset
 $svpy -m $tool.settings set blah 0
+$svpy -m $tool.settings set SomeKey SomeValue
 $svpy -m $tool.settings get blah
+$svpy -m $tool.settings get nothing
+$svpy -m $tool.settings enum
 echo "Complete: $tool test."
 
 popd

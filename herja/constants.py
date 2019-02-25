@@ -26,6 +26,15 @@ PY3 = sys.version_info.major == 3
 
 
 #
+#   Time
+#
+
+MINUTE = 60
+HOUR = MINUTE * 60
+DAY = HOUR * 24
+
+
+#
 #   Request Headers
 #
 

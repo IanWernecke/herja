@@ -16,6 +16,10 @@ from ..decorators import MainCommands
     ('set', 'Set a value to be stored in settings.', [
         (['key'], {'help': 'The name of the value to save in settings.'}),
         (['value'], {'help': 'The value of the key to be stored in settings.'})
+    ]),
+    ('enum', 'List the values currently stored.', []),
+    ('prompt', 'Prompt the user for a value to be saved.', [
+        (['key'], {'help': 'The name of the value to save in settings.'})
     ])
 )
 def main(args):
@@ -26,31 +30,35 @@ def main(args):
         if os.path.isfile(SETTINGS_PATH):
             logging.info('Removing log: "%s"', SETTINGS_PATH)
             os.remove(SETTINGS_PATH)
-        return 0
 
     # get a configuration value
     if args.command == 'get':
 
+        # read the setting
         with Settings() as settings:
-            result = settings.get(args.key, None)
-
-        if result is None:
-            logging.warning('Failed to obtain value for key: "%s"', args.key)
-            return 1
-
-        logging.info('Obtained value from settings: "%s"', result)
-        return 0
+            result = settings[args.key]
+        logging.info('Settings key "%s" has value "%s".', args.key, result)
 
     # set a configuration value
     if args.command == 'set':
+        if args.value.isdigit():
+            args.value = int(args.value)
 
         with Settings() as settings:
             settings[args.key] = args.value
 
+        # check it was written correctly
         with Settings() as settings:
             result = settings.get(args.key, None)
 
         assert result == args.value, 'Invalid result obtained: "{0}"'.format(result)
-        return 0
 
-    return 1
+    # enumerate the settings
+    if args.command == 'enum':
+        with Settings() as settings:
+            print('[Settings]')
+            for key in settings:
+                print('{0}={1}'.format(key, settings[key]))
+            print()
+
+    return 0
