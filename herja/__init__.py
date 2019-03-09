@@ -4,6 +4,7 @@
 import logging
 import os
 import subprocess
+import time
 
 from .assertions import assert_type
 from .conversions import to_bytes, to_str
@@ -72,3 +73,9 @@ def quotify(data):
     if space in data:
         return quote + data + quote
     return data
+
+
+def sleep(number):
+    """Wrap a given amount of seconds."""
+    logging.debug('Sleeping: %d', number)
+    time.sleep(number)

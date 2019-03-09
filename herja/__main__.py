@@ -5,7 +5,7 @@ import pprint
 
 from .conversions import html_to_soup
 from .decorators import MainCommands
-from .net import Session
+from .net import Session, get_form_inputs
 from .settings import Settings
 
 
@@ -28,13 +28,21 @@ from .settings import Settings
         })
     ]),
     ('meetup-rsvp', 'RSVP to an event.', [
+        (['group'], {'help': 'The name of the group whose events to read.'}),
         (['event_id'], {'help': 'The event id to query.'}),
+        (['rsvp'], {
+            'choices': ['yes', 'no'],
+            'default': 'yes',
+            'nargs': '?',
+            'help': 'Set the confirmation to yes or no.'
+        }),
         (['-d', '--debug'], {
             'action': 'store_true',
             'default': False,
             'help': 'Whether to dump the raw events for inspection.'
         })
-    ])
+    ]),
+    ('test', 'Testing command.', [])
 )
 def main(args):
     """Handle arguments given to this module."""
@@ -98,15 +106,37 @@ def main(args):
 
     if args.command == 'meetup-rsvp':
 
-        meetup_api_params['event_id'] = args.event_id
-        meetup_api_params['rsvp'] = 'yes'
         with Session() as session:
-            response = session.post(
-                'https://api.meetup.com/2/rsvp',
-                params=meetup_api_params
-            )
-            print(response)
-            print(response.status_code)
-            print(response.content)
+
+            # authenticate
+            response = session.get('https://secure.meetup.com/login/')
+            logging.info(response)
+            soup = html_to_soup(response.content)
+
+            login_form = soup.find('form', {'id': 'loginForm'})
+            assert login_form is not None, 'Failed to find login form.'
+
+            inputs = get_form_inputs(login_form)
+            with Settings() as settings:
+                inputs['username'] = settings['meetup-username']
+                inputs['password'] = settings['meetup-password']
+
+            destination = login_form.attrs['action']
+            response = session.post(destination, params=inputs)
+            logging.info(response)
+
+            # request the group page, if we are smart
+            # GET https://www.meetup.com/VP_Boardgame_Club_at_Severna_Park/
+            response = session.get('https://www.meetup.com/{0}/'.format(args.group))
+            logging.info(response)
+            response.content
+
+            # rsvp to the event
+            # https://www.meetup.com/VP_Boardgame_Club_at_Severna_Park/events/259097908/?action=rsvp&response=yes
+            response = session.get('https://www.meetup.com/{0}/events/{1}/'.format(
+                args.group, args.event_id
+            ))
+            logging.info(response)
+            response.content
 
     return 0

@@ -21,6 +21,16 @@ class Session(RequestsSession):
             logging.debug('Set Header "%s" to "%s"', key, value)
 
 
+def get_form_inputs(form_soup):
+    """Get the inputs of a form in a dictionary format."""
+    inputs = {}
+    for element in form_soup.find_all('input'):
+        key = element.attrs['name']
+        value = element.attrs['value'] if 'value' in element.attrs else ''
+        inputs[key] = value
+    return inputs
+
+
 def get_meetup_events(group):
     """Obtain the events of a meetup group, using an api token."""
     with Settings() as settings:
