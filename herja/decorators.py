@@ -215,6 +215,21 @@ class LogArguments(LogLevelContainer):
         return wrapper
 
 
+class LogExceptions(LogLevelContainer):
+    """A class object to hold a logging level and report any exceptions that are raised."""
+
+    def __call__(self, function):
+        """Log any exceptions that are raised."""
+        @wraps(function)
+        def wrapper(*args, **kwargs):
+            try:
+                return function(*args, **kwargs)
+            except BaseException as e:
+                logging.log(self.level, 'Exception: %r, %r', e, e.args)
+                raise e
+        return wrapper
+
+
 class LogResult(LogLevelContainer):
     """A class object to hold a logging level and report the result of a function at that level."""
 
@@ -233,12 +248,32 @@ class LogAll(LogLevelContainer):
 
     def __call__(self, function):
         """Wrap a bunch of decorators around the given function so information is logged."""
-        @LogSteps(self.level)
-        @LogArguments(self.level)
-        @LogResult(self.level)
         @wraps(function)
         def wrapper(*args, **kwargs):
-            return function(*args, **kwargs)
+
+            # log enter
+            logging.log(self.level, 'Function: %s, Enter', function.__name__)
+
+            # log arguments
+            for arg in args:
+                logging.log(self.level, 'Function: %s, Arg: %r', function.__name__, arg)
+            for k in kwargs:
+                logging.log(self.level, 'Function: %s, Key: %r, Value: %r', function.__name__, k, kwargs[k])
+
+            # log exceptions
+            try:
+                result = function(*args, **kwargs)
+            except BaseException as e:
+                logging.log(self.level, 'Exception: %r, %r', e, e.args)
+                raise e
+
+            # log result
+            logging.log(self.level, 'Function: %s, Result: %r', function.__name__, result)
+
+            # log exit
+            logging.log(self.level, 'Function: %s, Exit', function.__name__)
+            return result
+            
         return wrapper
 
 
@@ -249,6 +284,7 @@ class LogDecoratorContainer(object):
         """Assign the decorations to self."""
         self.steps = LogSteps(level)
         self.args = LogArguments(level)
+        self.exceptions = LogExceptions(level)
         self.result = LogResult(level)
         self.all = LogAll(level)
 
