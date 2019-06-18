@@ -29,12 +29,3 @@ def get_form_inputs(form_soup):
         value = element.attrs['value'] if 'value' in element.attrs else ''
         inputs[key] = value
     return inputs
-
-
-def get_meetup_events(group):
-    """Obtain the events of a meetup group, using an api token."""
-    with Settings() as settings:
-        token = settings['meetup-api-token']
-
-    with Session() as session:
-        response = session.get('https://api.meetup.com/{0}/events', params={'sign': 'true', 'token': token})

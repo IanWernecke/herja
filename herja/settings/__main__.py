@@ -1,11 +1,14 @@
 """Execute a reset, a get, or a set command for various settings."""
 
 
-import logging
 import os
 
 from . import Settings, SETTINGS_PATH
 from ..decorators import MainCommands
+from ..logging import get_logger
+
+
+LOGGER = get_logger()
 
 
 @MainCommands(
@@ -26,9 +29,9 @@ def main(args):
     """Handle arguments given to this module."""
     # remove the current configuration file, if it exists
     if args.command == 'reset':
-        logging.info('Ensuring log does not exist: "%s"', SETTINGS_PATH)
+        LOGGER.info('Ensuring log does not exist: "%s"', SETTINGS_PATH)
         if os.path.isfile(SETTINGS_PATH):
-            logging.info('Removing log: "%s"', SETTINGS_PATH)
+            LOGGER.info('Removing log: "%s"', SETTINGS_PATH)
             os.remove(SETTINGS_PATH)
 
     # get a configuration value
@@ -37,7 +40,7 @@ def main(args):
         # read the setting
         with Settings() as settings:
             result = settings[args.key]
-        logging.info('Settings key "%s" has value "%s".', args.key, result)
+        LOGGER.info('Settings key "%s" has value "%s".', args.key, result)
 
     # set a configuration value
     if args.command == 'set':

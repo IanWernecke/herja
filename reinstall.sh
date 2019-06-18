@@ -77,7 +77,7 @@ $svpy -m $tool.settings reset
 $svpy -m $tool.settings set blah 0
 $svpy -m $tool.settings set SomeKey SomeValue
 $svpy -m $tool.settings get blah
-$svpy -m $tool.settings get nothing
+# $svpy -m $tool.settings get nothing
 $svpy -m $tool.settings enum
 echo "Complete: $tool test."
 

@@ -2,13 +2,13 @@
 
 
 import hashlib
-import logging
 import json
 import os
 
 from ..assertions import assert_not_none
 from ..constants import EMPTY_DICT_SHA256_HEXDIGEST
 from ..conversions import to_bytes
+from ..logging import get_logger
 
 
 __all__ = [
@@ -18,6 +18,7 @@ __all__ = [
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LOGGER = get_logger()
 SETTINGS_PATH = os.path.join(BASE_DIR, 'settings.json')
 
 
@@ -35,7 +36,7 @@ class Settings(dict):
         """If this is a with block, automatically read the file for usage."""
         if self.path is None:
             self.path = SETTINGS_PATH
-        logging.info('Settings path: "%s"', self.path)
+        LOGGER.info('Settings path: "%s"', self.path)
         self.read(self.path)
         return self
 
@@ -49,7 +50,7 @@ class Settings(dict):
         result = super(Settings, self).get(key, None)
         while result is None:
             value = input('Enter a value for "{0}": '.format(key)).strip()
-            if not len(value):
+            if not value:
                 continue
             if value.isdigit():
                 value = int(value)
@@ -90,10 +91,10 @@ class Settings(dict):
         """Load settings from a json file."""
         path = self._get_path(path)
         if not os.path.isfile(path):
-            logging.warning('Settings path not found: "%s"', self.path)
+            LOGGER.warning('Settings path not found: "%s"', self.path)
             return 1
 
-        logging.info('Settings reading from: "%s"', self.path)
+        LOGGER.info('Settings reading from: "%s"', self.path)
         with open(path, 'rb') as settings_file:
             data = settings_file.read()
 
