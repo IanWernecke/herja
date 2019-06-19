@@ -10,7 +10,7 @@ DEFAULT_FORMAT = '{asctime} [{levelname:>9}] {message} - ({filename}:{lineno:04}
 DEFAULT_FORMAT_STYLE = '{'
 
 
-@lru_cache(maxsize=10)
+@lru_cache(maxsize=6)
 def get_logger(level=logging.NOTSET):
     """Get a standardized logger object."""
     logger = logging.getLogger(__name__)

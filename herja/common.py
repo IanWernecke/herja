@@ -8,11 +8,14 @@ import time
 from .assertions import assert_type
 from .conversions import to_bytes, to_str
 from .logging import get_logger
+from .logging.decorators import debug
 
 
 LOGGER = get_logger()
 
 
+@debug.args
+@debug.result
 def execute(args, cwd=None):
     """Execute a command with subprocess to obtain the stdout, stderr, and return code."""
     if cwd is None:
@@ -44,15 +47,15 @@ def quotify(data):
 
 
 def sleep(number):
-    """Wrap a given amount of seconds."""
+    """Sleep a given amount of seconds."""
     LOGGER.debug('Sleeping: %d', number)
     time.sleep(number)
 
 
-def which(name):
-    """Attempt to find a binary file like the system this is being run upon."""
-    for path_dir in os.environ['PATH'].split(os.pathsep):
-        abs_name = os.path.join(os.path.expandvars(path_dir), name)
-        if os.path.isfile(abs_name):
-            return abs_name
-    return None
+@debug.args
+@debug.result
+def spawn(args, cwd=None):
+    """Spawn a process and do not wait for it to return."""
+    if cwd is None:
+        cwd = os.getcwd()
+    return subprocess.Popen(args, cwd=cwd)
