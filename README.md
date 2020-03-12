@@ -27,7 +27,7 @@ call on an argparse.ArgumentParser object. The result of the parsing is given to
 
 An example is easier than words, anyway:
 
-<blockquote>
+```python
 from herja.decorators import Main
 @Main(
   (['input'], dict(help='The name of the input file.')),
@@ -40,4 +40,4 @@ def main(args):
   # creates:
   #   Namespace(input='my_input.txt', output='my_output.pdf')
   return 0
-</blockquote>
+```
