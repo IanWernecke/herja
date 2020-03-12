@@ -28,14 +28,14 @@ call on an argparse.ArgumentParser object. The result of the parsing is given to
 An example is easier than words, anyway:
 
 > from herja.decorators import Main
-> @Main(
->   (['input'], dict(help='The name of the input file.')),
->   (['output'], dict(help='The name of the output file.'))
-> )
-> def main(args):
->   print(args)
->   # example invocation:
->   #   python thisfile.py my_input.txt my_output.pdf
->   # creates:
->   #   Namespace(input='my_input.txt', output='my_output.pdf')
->   return 0
+@Main(
+  (['input'], dict(help='The name of the input file.')),
+  (['output'], dict(help='The name of the output file.'))
+)
+def main(args):
+  print(args)
+  # example invocation:
+  #   python thisfile.py my_input.txt my_output.pdf
+  # creates:
+  #   Namespace(input='my_input.txt', output='my_output.pdf')
+  return 0
