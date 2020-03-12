@@ -1,3 +1,4 @@
+"""A python module for getting a standardized logger."""
 
 
 import logging
@@ -11,10 +12,10 @@ DEFAULT_FORMAT_STYLE = '{'
 
 
 @lru_cache(maxsize=6)
-def get_logger(level=logging.NOTSET):
+def get_logger(level=DEFAULT_LEVEL):
     """Get a standardized logger object."""
     logger = logging.getLogger(__name__)
-    logger.setLevel(DEFAULT_LEVEL)
+    logger.setLevel(level)
     logger.addHandler(get_stream_handler())
     return logger
 

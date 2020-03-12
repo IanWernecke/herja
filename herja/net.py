@@ -5,8 +5,7 @@ import logging
 
 from requests import Session as RequestsSession
 
-from .constants import HEADER_DEFAULTS
-from .settings import Settings
+from herja.constants import HEADER_DEFAULTS
 
 
 class Session(RequestsSession):

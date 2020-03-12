@@ -34,9 +34,9 @@ def seconds_to_minutes(seconds):
     return seconds / MINUTE
 
 
-def timestamp_to_datetime(seconds):
+def timestamp_to_datetime(timestamp):
     """Convert given seconds to a datetime object."""
-    return datetime.datetime.utcfromtimestamp(ts)
+    return datetime.datetime.utcfromtimestamp(timestamp)
 
 
 def to_bytes(convert, encoding=UTF_8):

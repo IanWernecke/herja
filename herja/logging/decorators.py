@@ -1,11 +1,12 @@
 """A logging decorator file for automagically logging things related to functions."""
+# pylint: disable=too-few-public-methods; decorator classes with inheritence
 
 
 import logging
 from functools import wraps
 
 
-class LogLevelContainer(object):
+class LogLevelContainer:
     """A class object to hold a logging level, for use when inherited."""
 
     def __init__(self, level=logging.NOTSET):
@@ -36,8 +37,8 @@ class LogArguments(LogLevelContainer):
         def wrapper(*args, **kwargs):
             for arg in args:
                 logging.log(self.level, 'Function: %s, Arg: %r', function.__name__, arg)
-            for k in kwargs:
-                logging.log(self.level, 'Function: %s, Key: %r, Value: %r', function.__name__, k, kwargs[k])
+            for key in kwargs:
+                logging.log(self.level, 'Function: %s, Key: %r, Value: %r', function.__name__, key, kwargs[key])
             return function(*args, **kwargs)
         return wrapper
 
@@ -51,9 +52,9 @@ class LogExceptions(LogLevelContainer):
         def wrapper(*args, **kwargs):
             try:
                 return function(*args, **kwargs)
-            except BaseException as e:
-                logging.log(self.level, 'Exception: %r, %r', e, e.args)
-                raise e
+            except BaseException as exc:
+                logging.log(self.level, 'Exception: %r, %r', exc, exc.args)
+                raise exc
         return wrapper
 
 
@@ -84,15 +85,15 @@ class LogAll(LogLevelContainer):
             # log arguments
             for arg in args:
                 logging.log(self.level, 'Function: %s, Arg: %r', function.__name__, arg)
-            for k in kwargs:
-                logging.log(self.level, 'Function: %s, Key: %r, Value: %r', function.__name__, k, kwargs[k])
+            for key in kwargs:
+                logging.log(self.level, 'Function: %s, Key: %r, Value: %r', function.__name__, key, kwargs[key])
 
             # log exceptions
             try:
                 result = function(*args, **kwargs)
-            except BaseException as e:
-                logging.log(self.level, 'Exception: %r, %r', e, e.args)
-                raise e
+            except BaseException as exc:
+                logging.log(self.level, 'Exception: %r, %r', exc, exc.args)
+                raise exc
 
             # log result
             logging.log(self.level, 'Function: %s, Result: %r', function.__name__, result)
@@ -104,7 +105,7 @@ class LogAll(LogLevelContainer):
         return wrapper
 
 
-class LogDecoratorContainer(object):
+class LogDecoratorContainer:
     """An object to be created that houses decorator functions."""
 
     def __init__(self, level=logging.NOTSET):
@@ -117,9 +118,11 @@ class LogDecoratorContainer(object):
 
 
 # define some convenient decorator containers
+# pylint: disable=invalid-name; standard lowercase decorators
 notset = LogDecoratorContainer(logging.NOTSET)
 debug = LogDecoratorContainer(logging.DEBUG)
 info = LogDecoratorContainer(logging.INFO)
 warning = LogDecoratorContainer(logging.WARNING)
 error = LogDecoratorContainer(logging.ERROR)
 critical = LogDecoratorContainer(logging.CRITICAL)
+# pylint: enable=invalid-name

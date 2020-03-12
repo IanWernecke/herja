@@ -1,5 +1,5 @@
-#!python3
 """This file is designed to provide decorators for other files."""
+# pylint: disable=too-few-public-methods; decorator classes with inheritence
 
 
 import argparse

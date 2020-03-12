@@ -8,5 +8,7 @@ __all__ = [
     'conversions',
     'decorators',
     'fs',
-    'net'
+    'logging',
+    'net',
+    'settings'
 ]

@@ -5,10 +5,10 @@ import os
 import subprocess
 import time
 
-from .assertions import assert_type
-from .conversions import to_bytes, to_str
-from .logging import get_logger
-from .logging.decorators import debug
+from herja.assertions import assert_type
+from herja.conversions import to_bytes, to_str
+from herja.logging import get_logger
+from herja.logging.decorators import debug
 
 
 LOGGER = get_logger()

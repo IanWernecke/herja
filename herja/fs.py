@@ -1,3 +1,6 @@
+"""Common file system operations."""
+
+
 import os
 from .logging.decorators import debug
 

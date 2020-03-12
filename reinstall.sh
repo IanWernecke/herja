@@ -31,6 +31,13 @@ fi
 echo "Virtual Python found."
 
 
+# ensure pytest is installed in the virtual environment
+if [[ "$($vpy -m pip list | grep -E '^pytest' | wc -l)" -eq 0 ]]; then
+    echo "Pytest not found in the environment. Installing ..."
+    $vpy -m pip install pytest
+fi
+
+
 # clean up old wheels
 dist="$(pwd)/dist"
 echo "Beginning: Removing old wheels ..."

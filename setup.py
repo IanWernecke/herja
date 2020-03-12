@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='herja',
-    version='0.0.5',
+    version='0.0.6',
     author='IanWernecke',
     author_email='IanWernecke@protonmail.com',
     description='A package for handling common utilities.',
