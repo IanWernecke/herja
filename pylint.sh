@@ -1,1 +1,1 @@
-python3 -m pylint --rcfile pylintrc herja
+python3 -m pylint --rcfile .pylintrc herja

@@ -1,8 +1,15 @@
 """A collection of common object conversions."""
 
 
+# standard
+import datetime
+
+
+# installed
 from bs4 import BeautifulSoup
 
+
+# module
 from .assertions import assert_type
 from .constants import UTF_8, MINUTE, HOUR
 
@@ -25,6 +32,11 @@ def seconds_to_hours(seconds):
 def seconds_to_minutes(seconds):
     """Convert seconds to minutes."""
     return seconds / MINUTE
+
+
+def timestamp_to_datetime(seconds):
+    """Convert given seconds to a datetime object."""
+    return datetime.datetime.utcfromtimestamp(ts)
 
 
 def to_bytes(convert, encoding=UTF_8):
