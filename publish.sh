@@ -19,8 +19,8 @@ fi
 # ensure twine is installed
 if [[ $($py -m pip list | grep -E '^twine' | wc -l ) -eq 0 ]];
 then
-    echo "Required module not found: twine"
-    exit 1
+    echo "Required module not found: twine";
+    exit 1;
 fi
 
 $py -m twine upload dist/*.whl
