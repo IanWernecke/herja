@@ -1,5 +1,4 @@
 # herja
-=======
 
 ## A repository of python code for quality of life purposes.
 
