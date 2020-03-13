@@ -16,7 +16,7 @@ from .constants import UTF_8, MINUTE, HOUR
 
 def html_to_soup(html):
     """Convert given html to a soup object."""
-    return BeautifulSoup(html, 'html.parser')
+    return BeautifulSoup(html, "html.parser")
 
 
 def ms_to_hours(milliseconds):

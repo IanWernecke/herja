@@ -27,13 +27,12 @@ def execute(args, cwd=None):
     # force everything into byte strings
     args = [to_bytes(arg) for arg in args]
 
-    LOGGER.info('[%s]$ %s', os.path.basename(cwd), ' '.join(quotify(to_str(a)) for a in args))
+    LOGGER.info(
+        "[%s]$ %s", os.path.basename(cwd), " ".join(quotify(to_str(a)) for a in args)
+    )
 
     process = subprocess.Popen(
-        args,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        cwd=cwd
+        args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd
     )
     stdout, stderr = process.communicate()
     return stdout, stderr, process.returncode
@@ -42,13 +41,13 @@ def execute(args, cwd=None):
 def quotify(data):
     """Wrap a string or bytes in quotes, if a space is inside."""
     assert_type(data, bytes, str)
-    quote, space = (b'"', b' ') if isinstance(data, bytes) else ('"', ' ')
+    quote, space = (b'"', b" ") if isinstance(data, bytes) else ('"', " ")
     return quote + data + quote if space in data else data
 
 
 def sleep(number):
     """Sleep a given amount of seconds."""
-    LOGGER.debug('Sleeping: %d', number)
+    LOGGER.debug("Sleeping: %d", number)
     time.sleep(number)
 
 

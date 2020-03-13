@@ -6,9 +6,9 @@ from functools import lru_cache
 
 
 DEFAULT_LEVEL = logging.DEBUG
-DEFAULT_DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
-DEFAULT_FORMAT = '{asctime} [{levelname:>9}] {message} - ({filename}:{lineno:04})'
-DEFAULT_FORMAT_STYLE = '{'
+DEFAULT_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+DEFAULT_FORMAT = "{asctime} [{levelname:>9}] {message} - ({filename}:{lineno:04})"
+DEFAULT_FORMAT_STYLE = "{"
 
 
 @lru_cache(maxsize=6)
@@ -20,7 +20,9 @@ def get_logger(level=DEFAULT_LEVEL):
     return logger
 
 
-def get_formatter(fmt=DEFAULT_FORMAT, datefmt=DEFAULT_DATE_FORMAT, style=DEFAULT_FORMAT_STYLE):
+def get_formatter(
+    fmt=DEFAULT_FORMAT, datefmt=DEFAULT_DATE_FORMAT, style=DEFAULT_FORMAT_STYLE
+):
     """Obtain a default formatter."""
     return logging.Formatter(fmt=fmt, datefmt=datefmt, style=style)
 

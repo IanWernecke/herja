@@ -19,12 +19,14 @@ class LogSteps(LogLevelContainer):
 
     def __call__(self, function):
         """Report when a function enters and exits."""
+
         @wraps(function)
         def wrapper(*args, **kwargs):
-            logging.log(self.level, 'Function: %s, Enter', function.__name__)
+            logging.log(self.level, "Function: %s, Enter", function.__name__)
             result = function(*args, **kwargs)
-            logging.log(self.level, 'Function: %s, Exit', function.__name__)
+            logging.log(self.level, "Function: %s, Exit", function.__name__)
             return result
+
         return wrapper
 
 
@@ -33,13 +35,21 @@ class LogArguments(LogLevelContainer):
 
     def __call__(self, function):
         """Log the args and kwargs of the decorated function."""
+
         @wraps(function)
         def wrapper(*args, **kwargs):
             for arg in args:
-                logging.log(self.level, 'Function: %s, Arg: %r', function.__name__, arg)
+                logging.log(self.level, "Function: %s, Arg: %r", function.__name__, arg)
             for key in kwargs:
-                logging.log(self.level, 'Function: %s, Key: %r, Value: %r', function.__name__, key, kwargs[key])
+                logging.log(
+                    self.level,
+                    "Function: %s, Key: %r, Value: %r",
+                    function.__name__,
+                    key,
+                    kwargs[key],
+                )
             return function(*args, **kwargs)
+
         return wrapper
 
 
@@ -48,13 +58,15 @@ class LogExceptions(LogLevelContainer):
 
     def __call__(self, function):
         """Log any exceptions that are raised."""
+
         @wraps(function)
         def wrapper(*args, **kwargs):
             try:
                 return function(*args, **kwargs)
             except BaseException as exc:
-                logging.log(self.level, 'Exception: %r, %r', exc, exc.args)
+                logging.log(self.level, "Exception: %r, %r", exc, exc.args)
                 raise exc
+
         return wrapper
 
 
@@ -63,11 +75,15 @@ class LogResult(LogLevelContainer):
 
     def __call__(self, function):
         """Log the result of a decorated function."""
+
         @wraps(function)
         def wrapper(*args, **kwargs):
             result = function(*args, **kwargs)
-            logging.log(self.level, 'Function: %s, Result: %r', function.__name__, result)
+            logging.log(
+                self.level, "Function: %s, Result: %r", function.__name__, result
+            )
             return result
+
         return wrapper
 
 
@@ -76,30 +92,39 @@ class LogAll(LogLevelContainer):
 
     def __call__(self, function):
         """Wrap a bunch of decorators around the given function so information is logged."""
+
         @wraps(function)
         def wrapper(*args, **kwargs):
 
             # log enter
-            logging.log(self.level, 'Function: %s, Enter', function.__name__)
+            logging.log(self.level, "Function: %s, Enter", function.__name__)
 
             # log arguments
             for arg in args:
-                logging.log(self.level, 'Function: %s, Arg: %r', function.__name__, arg)
+                logging.log(self.level, "Function: %s, Arg: %r", function.__name__, arg)
             for key in kwargs:
-                logging.log(self.level, 'Function: %s, Key: %r, Value: %r', function.__name__, key, kwargs[key])
+                logging.log(
+                    self.level,
+                    "Function: %s, Key: %r, Value: %r",
+                    function.__name__,
+                    key,
+                    kwargs[key],
+                )
 
             # log exceptions
             try:
                 result = function(*args, **kwargs)
             except BaseException as exc:
-                logging.log(self.level, 'Exception: %r, %r', exc, exc.args)
+                logging.log(self.level, "Exception: %r, %r", exc, exc.args)
                 raise exc
 
             # log result
-            logging.log(self.level, 'Function: %s, Result: %r', function.__name__, result)
+            logging.log(
+                self.level, "Function: %s, Result: %r", function.__name__, result
+            )
 
             # log exit
-            logging.log(self.level, 'Function: %s, Exit', function.__name__)
+            logging.log(self.level, "Function: %s, Exit", function.__name__)
             return result
 
         return wrapper

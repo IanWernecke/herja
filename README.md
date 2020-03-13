@@ -1,6 +1,6 @@
 # herja
 
-## A repository of python code for quality of life purposes.
+**A repository of python code for quality of life purposes.**
 
 Packages:
 * herja.logging
@@ -16,7 +16,7 @@ Modules:
 * herja.net
 
 
-Common features:
+## Common features:
 
 The easily accessible use of this module is probably the Main decorator. This decorator automatically parses input given
 on the command line and attempts to parse it according to a simple argument parser. The decorators expects \*args to
@@ -39,4 +39,50 @@ def main(args):
   # creates:
   #   Namespace(input='my_input.txt', output='my_output.pdf')
   return 0
+```
+
+## Setup
+
+Install pipx, poetry, pytest, and black:
+
+```bash
+pip install pipx
+pipx completions
+pipx ensurepath
+
+pipx install black
+pipx install poetry
+pipx install pytest
+```
+
+## Pytest
+
+Run pytest before cleaning, building, and publishing:
+
+```bash
+pytest tests
+```
+
+## Cleaning
+
+Run black on the project to clean it before building:
+
+```bash
+black herja
+```
+
+## Building
+
+Here is the basic example of how to build the project:
+
+```bash
+poetry build
+```
+
+## Publish
+
+Publish using the installed poetry tool:
+
+```bash
+poetry publish
 ```

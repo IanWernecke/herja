@@ -11,15 +11,12 @@ from herja.conversions import to_bytes
 from herja.logging import get_logger
 
 
-__all__ = [
-    'SETTINGS_PATH',
-    'Settings'
-]
+__all__ = ["SETTINGS_PATH", "Settings"]
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 LOGGER = get_logger()
-SETTINGS_PATH = os.path.join(BASE_DIR, 'settings.json')
+SETTINGS_PATH = os.path.join(BASE_DIR, "settings.json")
 
 
 class Settings(dict):
@@ -95,7 +92,7 @@ class Settings(dict):
             return 1
 
         LOGGER.info('Settings reading from: "%s"', self.path)
-        with open(path, 'rb') as settings_file:
+        with open(path, "rb") as settings_file:
             data = settings_file.read()
 
         self.update(json.loads(data))
@@ -106,5 +103,5 @@ class Settings(dict):
         """Write the settings back out to a json file."""
         path = self._get_path(path)
         assert_not_none(path)
-        with open(path, 'wb') as settings_file:
+        with open(path, "wb") as settings_file:
             settings_file.write(to_bytes(json.dumps(self.current)))

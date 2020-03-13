@@ -23,8 +23,8 @@ class Session(RequestsSession):
 def get_form_inputs(form_soup):
     """Get the inputs of a form in a dictionary format."""
     inputs = {}
-    for element in form_soup.find_all('input'):
-        key = element.attrs['name']
-        value = element.attrs['value'] if 'value' in element.attrs else ''
+    for element in form_soup.find_all("input"):
+        key = element.attrs["name"]
+        value = element.attrs["value"] if "value" in element.attrs else ""
         inputs[key] = value
     return inputs

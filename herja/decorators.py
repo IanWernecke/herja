@@ -16,6 +16,7 @@ from functools import wraps
 #   Function Decorators
 #
 
+
 def args2keywords(function):
     """
     Wrap a function such that is converts given NameSpace objects into keywords.
@@ -23,16 +24,19 @@ def args2keywords(function):
     :param function: the decorated function that requires keywords
     :return: a wrapped function that accepts args
     """
+
     @wraps(function)
     def wrapper(args, **kwargs):
         kwargs.update(**vars(args))
         return function(**kwargs)
+
     return wrapper
 
 
 #
 #   Argument Intercept Decorators
 #
+
 
 class ArgumentIntercept:
     """Parse the arguments given to the decorated function and pass the resulting NameSpace."""
@@ -46,6 +50,7 @@ class ArgumentIntercept:
 
     def __call__(self, function):
         """Intercept the given arguments and pass them to the parser."""
+
         @wraps(function)
         def wrapper(arguments):
 
@@ -56,23 +61,25 @@ class ArgumentIntercept:
                 args = self.parser.parse_args(shlex.split(arguments))
 
             else:
-                raise RuntimeError('Unhandled arguments type: "{}"'.format(type(arguments)))
+                raise RuntimeError(
+                    'Unhandled arguments type: "{}"'.format(type(arguments))
+                )
 
             # logging should be configured if this is a main class and we are inside '__main__'.
             if self.main_class:
 
                 level = logging.NOTSET
                 logging.basicConfig(
-                    format='%(asctime)s [%(levelname)9s] %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S',
-                    level=level
+                    format="%(asctime)s [%(levelname)9s] %(message)s",
+                    datefmt="%Y-%m-%d %H:%M:%S",
+                    level=level,
                 )
-                logging.debug('Logging level set to: %d', level)
+                logging.debug("Logging level set to: %d", level)
 
             return function(args)
 
         # if the parent frame's __name__ is not __main__, this is not a "main" class
-        if inspect.currentframe().f_back.f_globals['__name__'] != '__main__':
+        if inspect.currentframe().f_back.f_globals["__name__"] != "__main__":
             self.main_class = False
 
         # return the function if this is not a main class
@@ -106,7 +113,7 @@ class ParseCommands(ArgumentIntercept):
     def __init__(self, *command_tuples):
         """Add all of the subparsers to the parser."""
         super(ParseCommands, self).__init__()
-        subparsers = self.parser.add_subparsers(dest='command')
+        subparsers = self.parser.add_subparsers(dest="command")
         for cmd_name, cmd_help, tuples in command_tuples:
             option = subparsers.add_parser(cmd_name, help=cmd_help)
             for args, kwargs in tuples:
@@ -116,6 +123,7 @@ class ParseCommands(ArgumentIntercept):
 #
 #   Main Decorators
 #
+
 
 class Main(Parse):
     """Parse and call the decorated function."""
@@ -133,6 +141,7 @@ class MainCommands(ParseCommands):
 #   Require Class Decorators
 #
 
+
 class Require:
     """A decorator that raises a RuntimeError if any of the given args are not True."""
 
@@ -140,7 +149,7 @@ class Require:
         """Ensure each argument given to this decorator evaluates to True with the function."""
         for arg in args:
             if not bool(arg):
-                raise RuntimeError('Requirement failed: %r' % arg)
+                raise RuntimeError("Requirement failed: %r" % arg)
 
     def __call__(self, function):
         """Return the same function as was decorated."""
@@ -154,7 +163,7 @@ class RequireDirs:
         """Ensure each argument given to this decorator evaluates to True with the function."""
         for arg in args:
             if not os.path.isdir(arg):
-                raise RuntimeError('Directory not found: %r' % arg)
+                raise RuntimeError("Directory not found: %r" % arg)
 
     def __call__(self, function):
         """Return the same function as was decorated."""
@@ -168,7 +177,7 @@ class RequireFiles:
         """Ensure each argument given to this decorator evaluates to True with the function."""
         for arg in args:
             if not os.path.isfile(arg):
-                raise RuntimeError('File not found: %r' % arg)
+                raise RuntimeError("File not found: %r" % arg)
 
     def __call__(self, function):
         """Return the same function as was decorated."""
